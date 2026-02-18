@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>تطبيقي — Google Play</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --blue: #1a73e8;
+      --green: #01875f;
+      --gray: #5f6368;
+      --light: #f8f9fa;
+      --border: #e0e0e0;
+      --text: #202124;
+      --yellow: #f4b400;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #fff;
+      color: var(--text);
+      direction: rtl;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .logo svg { width: 28px; height: 28px; }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--gray);
+      letter-spacing: -.3px;
+    }
+    .logo-text span { font-weight: 600; }
+
+    .search-bar {
+      flex: 1;
+      max-width: 440px;
+      display: flex;
+      align-items: center;
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 8px 16px;
+      gap: 10px;
+    }
+
+    .search-bar svg { color: var(--gray); flex-shrink: 0; }
+
+    .search-bar input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 14px;
+      color: var(--text);
+      width: 100%;
+      font-family: inherit;
+      direction: rtl;
+    }
+
+    .search-bar input::placeholder { color: #aaa; }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* ===== MAIN ===== */
+    main { max-width: 900px; margin: 0 auto; padding: 28px 20px; }
+
+    /* ===== APP HERO ===== */
+    .app-hero {
+      display: flex;
+      gap: 28px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border);
+      align-items: flex-start;
+    }
+
+    .app-icon-wrap { flex-shrink: 0; }
+
+    .app-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 22px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      display: block;
+      background: #e8f0fe;
+    }
+
+    .app-icon-placeholder {
+      width: 120px;
+      height: 120px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #4285f4, #1a73e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .app-details { flex: 1; }
+
+    .app-name {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .app-developer {
+      color: var(--blue);
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-bottom: 14px;
+    }
+
+    .app-developer:hover { text-decoration: underline; }
+
+    .app-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 20px;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .stat-divider {
+      color: var(--border);
+      font-size: 18px;
+    }
+
+    .stars-row { display: flex; gap: 2px; }
+    .star { font-size: 14px; }
+    .star.filled { color: var(--yellow); }
+    .star.half { color: var(--yellow); opacity: .5; }
+    .star.empty { color: #ddd; }
+
+    .rating-num { font-weight: 600; color: var(--text); }
+
+    .badge-free {
+      background: #e6f4ea;
+      color: #137333;
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .btn-install {
+      padding: 10px 32px;
+      border-radius: 24px;
+      background: var(--green);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+      font-family: inherit;
+    }
+
+    .btn-install:hover { background: #017550; }
+    .btn-install:active { transform: scale(.97); }
+
+    .btn-install.installed {
+      background: var(--light);
+      color: var(--gray);
+      border: 1px solid var(--border);
+    }
+
+    .btn-install.installed:hover { background: #eee; }
+
+    .btn-sec {
+      padding: 10px 20px;
+      border-radius: 24px;
+      background: var(--light);
+      color: var(--gray);
+      font-size: 13px;
+      font-weight: 500;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: inherit;
+    }
+
+    .btn-sec:hover { background: #eee; }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .tag {
+      padding: 4px 14px;
+      border-radius: 16px;
+      background: #e8f0fe;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 500;
+      border: 1px solid #d2e3fc;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .tag:hover { background: #d2e3fc; }
+
+    /* ===== SCREENSHOTS ===== */
+    .section { padding: 28px 0; border-bottom: 1px solid var(--border); }
+    .section-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 16px; }
+
+    .screenshots-scroll {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .screenshots-scroll::-webkit-scrollbar { height: 4px; }
+    .screenshots-scroll::-webkit-scrollbar-track { background: transparent; }
+    .screenshots-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    .screenshot-card {
+      flex-shrink: 0;
+      width: 160px;
+      height: 284px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: box-shadow .2s, transform .2s;
+      background: #f1f3f4;
+    }
+
+    .screenshot-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.15); transform: translateY(-2px); }
+
+    .screenshot-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .screenshot-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #e8f0fe 0%, #d2e3fc 100%);
+      color: #4285f4;
+      font-size: 13px;
+      font-weight: 500;
+      gap: 8px;
+    }
+
+    .screenshot-placeholder svg { width: 32px; height: 32px; opacity: .6; }
+
+    .hint {
+      text-align: center;
+      font-size: 12px;
+      color: #aaa;
+      margin-top: 10px;
+    }
+
+    /* ===== APP INFO ===== */
+    .about-text {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .features-list { list-style: none; margin-bottom: 20px; }
+
+    .features-list li {
+      font-size: 14px;
+      color: var(--gray);
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .features-list li::before {
+      content: "✅";
+      font-size: 14px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .info-card {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    .info-label { font-size: 11px; color: #aaa; margin-bottom: 4px; }
+    .info-value { font-size: 13px; font-weight: 600; color: var(--text); }
+
+    /* ===== RATING BOX ===== */
+    .rating-box {
+      background: #f6fdf9;
+      border: 1px solid #c8e6c9;
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .rating-big { text-align: center; }
+    .rating-num-big { font-size: 52px; font-weight: 700; color: var(--text); line-height: 1; }
+    .rating-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+    .rating-bars { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 6px; }
+
+    .bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--gray); }
+    .bar-track { flex: 1; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width .5s; }
+    .bar-pct { width: 28px; text-align: left; }
+
+    /* ===== REVIEWS ===== */
+    .review-card {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 12px;
+      transition: border-color .2s;
+    }
+
+    .review-card:hover { border-color: #c0c0c0; }
+
+    .review-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .review-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .review-meta { flex: 1; }
+    .review-name { font-size: 14px; font-weight: 600; }
+    .review-date { font-size: 12px; color: #aaa; }
+    .review-stars { margin-bottom: 6px; }
+    .review-text { font-size: 13px; color: var(--gray); line-height: 1.7; }
+
+    .review-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .btn-like {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+      border-radius: 16px;
+      transition: background .15s, color .15s;
+      font-family: inherit;
+    }
+
+    .btn-like:hover { background: #e8f0fe; color: var(--blue); }
+    .btn-like.liked { color: var(--blue); }
+
+    .btn-write-review {
+      width: 100%;
+      margin-top: 6px;
+      padding: 14px;
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      background: none;
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: border-color .2s, color .2s;
+      font-family: inherit;
+    }
+
+    .btn-write-review:hover { border-color: var(--blue); color: var(--blue); }
+
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .link-see-all { font-size: 13px; color: var(--blue); cursor: pointer; font-weight: 500; }
+    .link-see-all:hover { text-decoration: underline; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--light);
+      border-top: 1px solid var(--border);
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: #aaa;
+      text-decoration: none;
+      transition: color .15s;
+    }
+
+    .footer-links a:hover { color: var(--gray); }
+    .footer-copy { text-align: center; font-size: 12px; color: #bbb; }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.85);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 12px; }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .app-hero { flex-direction: column; align-items: center; text-align: center; }
+      .tags, .btn-row, .app-stats { justify-content: center; }
+      .search-bar { display: none; }
+      .rating-box { flex-direction: column; align-items: center; }
+      .info-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* animate bars on load */
+    @keyframes growBar { from { width: 0; } }
+    .bar-fill { animation: growBar .8s ease both; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <a class="logo" href="#">
+    <!-- Play icon -->
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="24" cy="24" r="24" fill="#01875f"/>
+      <polygon points="18,14 36,24 18,34" fill="white"/>
+    </svg>
+    <span class="logo-text">
+      <span style="color:#4285f4">h</span><span style="color:#ea4335">e</span><span style="color:#fbbc04">m</span><span style="color:#4285f4">a
+      <span style="color:#5f6368"> Sallem</span>
+    </span>
+  </a>
+
+  <div class="search-bar">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" placeholder="ابحث عن تطبيقات وألعاب..." />
+  </div>
+
+  <div class="avatar">أ</div>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main>
+
+  <!-- APP HERO -->
+  <div class="app-hero">
+    <div class="app-icon-wrap">
+      <div class="app-icon-placeholder" id="iconWrap">
+        <img id="appIcon" src="images/appIcon.png" alt="أيقونة التطبيق" class="app-icon">
+      </div>
+    </div>
+
+    <div class="app-details">
+      <h1 class="app-name">Ruka Habits</h1>
+      <p class="app-developer">hema.io</p>
+
+      <div class="app-stats">
+        <div class="stat-item">
+          <span class="rating-num">4.8 🙂</span>
+          <div class="stars-row">
+            <span class="star filled">★</span>
+            <span class="star filled">★</span>
+            <span class="star filled">★</span>
+            <span class="star filled">★</span>
+            <span class="star half">★</span>
+          </div>
+          <span style="color:#aaa">• 1.2K تقييم</span>
+        </div>
+        <span class="stat-divider">|</span>
+        <span class="badge-free">مجاني</span>
+        <span class="stat-divider">|</span>
+        <div class="stat-item" style="color:#137333">
+          🎮 للجميع
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a class="btn-install" style="text-decoration: none;" id="installBtn" href="https://drive.google.com/uc?export=download&id=16GF3q_LyYL5RR0C849Q5bOP3904Y_rEh" download>تنزيل</a>
+        <button class="btn-sec">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+          إضافة للقائمة
+        </button>
+        <button class="btn-sec" onclick="share()">
+          <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+          مشاركة
+        </button>
+      </div>
+
+      <div class="tags">
+        <span class="tag">إنتاجية</span>
+        <span class="tag">مجاني</span>
+        <span class="tag">تطبيق عربي</span>
+        <span class="tag">بدون إنترنت</span>
+        <span class="tag">خفيف</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SCREENSHOTS -->
+  <div class="section">
+    <h2 class="section-title">لقطات الشاشة</h2>
+    <div class="screenshots-scroll" id="screenshotsRow">
+
+      <!-- لقطة 1 — استبدل src بصورتك -->
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/3.png" alt="الشاشة الرئيسية">
+      </div>
+      
+      <!-- لقطة 2 -->
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/4.png" alt="الشاشة الرئيسية">
+        
+      </div>
+      
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/5.png" alt="الشاشة الرئيسية">
+      </div>
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/6.png" alt="الشاشة الرئيسية">
+      </div>
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/7.png" alt="الشاشة الرئيسية">
+      </div>
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/8.png" alt="الشاشة الرئيسية">
+      </div>
+      <div class="screenshot-card" onclick="openLightbox(this)">
+        <img src="images/9.png" alt="الشاشة الرئيسية">
+      </div>
+
+    
+
+    </div>
+    <p class="hint">💡 اضغط على أي صورة لعرضها بالحجم الكامل</p>
+  </div>
+
+  <!-- APP INFO -->
+  <div class="section">
+    <h2 class="section-title">عن التطبيق</h2>
+    <p class="about-text">
+Ruka Habits هو تطبيق مصمم لمساعدتك على تنظيم مهامك اليومية وبناء عادات إيجابية بطريقة بسيطة وفعالة. يتيح لك التطبيق إضافة مهامك، تتبع عاداتك، ومراقبة تقدمك بشكل يومي من خلال واجهة سهلة الاستخدام وتصميم عملي. هدف Ruka Habits هو مساعدتك على تطوير نفسك خطوة بخطوة وتحويل الإنجازات الصغيرة اليومية إلى نجاحات كبيرة على المدى الطويل.
+    </p>
+
+
+    <h2 class="section-title">معلومات التطبيق</h2>
+    <div class="info-grid">
+      <div class="info-card"><div class="info-label">الإصدار</div><div class="info-value">1.1.0</div></div>
+      <div class="info-card"><div class="info-label">آخر تحديث</div><div class="info-value">2026/02/18</div></div>
+      <div class="info-card"><div class="info-label">الحجم</div><div class="info-value">71 MB</div></div>
+      <div class="info-card"><div class="info-label">Android</div><div class="info-value">5.0 فأعلى</div></div>
+      <div class="info-card"><div class="info-label">المطور</div><div class="info-value"> hema</div></div>
+      <div class="info-card"><div class="info-label">التصنيف</div><div class="info-value">للجميع +3</div></div>
+    </div>
+
+    <div class="rating-box">
+      <div class="rating-big">
+        <div class="rating-num-big">4.8</div>
+        <div class="stars-row" style="justify-content:center;margin-top:6px">
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star filled">★</span>
+          <span class="star half">★</span>
+        </div>
+        <div class="rating-sub">1,243 تقييم</div>
+      </div>
+      <div class="rating-bars">
+        <div class="bar-row">
+          <span>5</span><span class="star filled" style="font-size:11px">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+          <span class="bar-pct">80%</span>
+        </div>
+        <div class="bar-row">
+          <span>4</span><span class="star filled" style="font-size:11px">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:12%"></div></div>
+          <span class="bar-pct">12%</span>
+        </div>
+        <div class="bar-row">
+          <span>3</span><span class="star filled" style="font-size:11px">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:4%"></div></div>
+          <span class="bar-pct">4%</span>
+        </div>
+        <div class="bar-row">
+          <span>2</span><span class="star filled" style="font-size:11px">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:2%"></div></div>
+          <span class="bar-pct">2%</span>
+        </div>
+        <div class="bar-row">
+          <span>1</span><span class="star filled" style="font-size:11px">★</span>
+          <div class="bar-track"><div class="bar-fill" style="width:2%"></div></div>
+          <span class="bar-pct">2%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="#">سياسة الخصوصية</a>
+    <a href="#">شروط الاستخدام</a>
+    <a href="#">تواصل معنا</a>
+    <a href="#">مركز المساعدة</a>
+  </div>
+  <p class="footer-copy">© 2025 جميع الحقوق محفوظة — مبني بـ ❤️ من المطور هيما</p>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightboxImg" src="" alt="" />
+</div>
+
+<script>
+  // ===== زر التثبيت =====
+
+  // ===== زر الإعجاب =====
+  function toggleLike(btn, defaultCount) {
+    const liked = btn.classList.toggle('liked');
+    const span = btn.querySelector('span');
+    const newCount = liked ? defaultCount + 1 : defaultCount;
+    span.textContent = `مفيد (${newCount})`;
+  }
+
+  // ===== مشاركة =====
+  function share() {
+    if (navigator.share) {
+      navigator.share({ title: 'اسم تطبيقك', url: window.location.href });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      alert('تم نسخ الرابط! 📋');
+    }
+  }
+
+  // ===== Lightbox =====
+  function openLightbox(card) {
+    const img = card.querySelector('img');
+    if (!img) return; // لا توجد صورة بعد
+    document.getElementById('lightboxImg').src = img.src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
